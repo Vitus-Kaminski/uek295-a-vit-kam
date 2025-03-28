@@ -7,5 +7,4 @@ import java.util.UUID;
 
 @Repository
 public interface TrackingRepository extends JpaRepository<Tracking, UUID> {
-    // Zusätzliche Abfragen bei Bedarf
 }

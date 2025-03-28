@@ -4,6 +4,7 @@ import ch.noseryoung.sbdemo01.domain.tracking.Tracking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,24 +14,20 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    // Alle Bestellungen abrufen
+
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    // Eine Bestellung nach ID abrufen
     public Order getOrderById(UUID orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
-    // Neue Bestellung anlegen
     public Order createOrder(Order order) {
-        // Wenn Tracking direkt mitangelegt wird, wird es dank CascadeType.ALL auch gespeichert
         return orderRepository.save(order);
     }
 
-    // Bestellung aktualisieren
     public Order updateOrder(UUID orderId, Order updatedOrder) {
         Order existingOrder = getOrderById(orderId);
 
@@ -38,7 +35,6 @@ public class OrderService {
         existingOrder.setComment(updatedOrder.getComment());
         existingOrder.setDate(updatedOrder.getDate());
 
-        // Tracking ggf. aktualisieren
         Tracking updatedTracking = updatedOrder.getTracking();
         if (updatedTracking != null) {
             existingOrder.setTracking(updatedTracking);
@@ -47,9 +43,24 @@ public class OrderService {
         return orderRepository.save(existingOrder);
     }
 
-    // Bestellung löschen
     public void deleteOrder(UUID orderId) {
         Order existingOrder = getOrderById(orderId);
         orderRepository.delete(existingOrder);
+    }
+
+    public List<Order> getOrdersBeforeDate(LocalDate date) {
+        return orderRepository.findByDateBefore(date);
+    }
+
+    public List<Order> getOrdersAfterDate(LocalDate date) {
+        return orderRepository.findByDateAfter(date);
+    }
+
+    public List<Order> getOrdersByStatus(String status) {
+        return orderRepository.findByStatus(status);
+    }
+
+    public List<Order> getOrdersByComment(String keyword) {
+        return orderRepository.findByCommentContaining(keyword);
     }
 }

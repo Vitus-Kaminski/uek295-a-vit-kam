@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,5 +42,28 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<List<Order>> getOrdersByDate(
+            @RequestParam(required = false) String before,
+            @RequestParam(required = false) String after) {
+
+        if (before != null) {
+            return ResponseEntity.ok(orderService.getOrdersBeforeDate(LocalDate.parse(before)));
+        }
+        if (after != null) {
+            return ResponseEntity.ok(orderService.getOrdersAfterDate(LocalDate.parse(after)));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(orderService.getOrdersByStatus(status));
+    }
+
+    @GetMapping("/comment")
+    public ResponseEntity<List<Order>> getOrdersByComment(@RequestParam String contains) {
+        return ResponseEntity.ok(orderService.getOrdersByComment(contains));
     }
 }
