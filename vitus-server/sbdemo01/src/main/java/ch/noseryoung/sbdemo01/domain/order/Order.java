@@ -25,12 +25,9 @@ public class Order {
 
     private String status;
     private String comment;
-
     private LocalDate date;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tracking_id", referencedColumnName = "tracking_id")
+    @OneToOne(cascade = CascadeType.PERSIST) // Kein ALL, um ungewollte Löschungen zu vermeiden
+    @JoinColumn(name = "tracking_id", referencedColumnName = "tracking_id", nullable = false)
     private Tracking tracking;
-
 }

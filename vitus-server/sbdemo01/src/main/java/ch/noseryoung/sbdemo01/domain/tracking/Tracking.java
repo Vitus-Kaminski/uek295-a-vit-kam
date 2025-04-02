@@ -27,6 +27,4 @@ public class Tracking {
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
-
 }
