@@ -12,4 +12,3 @@ INSERT INTO tracking (tracking_id, code, status, last_update) VALUES
 
 INSERT INTO tracking (tracking_id, code, status, last_update) VALUES
     ('1b2a8e9c-5d7f-48d1-b0e1-3e4a9c2f8b0a', 'GHI654', 'Abholbereit', '2024-03-29 12:00:00');
-ON CONFLICT DO NOTHING;

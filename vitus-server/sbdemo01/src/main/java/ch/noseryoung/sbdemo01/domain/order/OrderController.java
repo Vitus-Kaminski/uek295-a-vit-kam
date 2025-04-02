@@ -1,5 +1,7 @@
 package ch.noseryoung.sbdemo01.domain.order;
 
+import ch.noseryoung.sbdemo01.domain.tracking.Tracking;
+import ch.noseryoung.sbdemo01.domain.tracking.TrackingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,40 +21,76 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @Operation(summary = "get a list with all orders")
+    @Autowired
+    private TrackingService trackingService;
+
+
+
+
+    @Operation(summary = "Get a list of all orders")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of orders")
+    })
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
+
+    @Operation(summary = "Get a specific order by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved order by ID"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable UUID orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
+
+    @Operation(summary = "Create a new order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created the order")
+    })
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
+
+    @Operation(summary = "Update an existing order by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated the order"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     @PutMapping("/{orderId}")
     public ResponseEntity<Order> updateOrder(@PathVariable UUID orderId, @RequestBody Order order) {
         Order updatedOrder = orderService.updateOrder(orderId, order);
         return ResponseEntity.ok(updatedOrder);
     }
 
+    @Operation(summary = "Delete an existing order by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted the order"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/date")
-    public ResponseEntity<List<Order>> getOrdersByDate(
-            @RequestParam(required = false) String before,
-            @RequestParam(required = false) String after) {
 
+
+    @Operation(summary = "Get orders filtered by date")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved filtered orders by date"),
+            @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
+    @GetMapping("/date")
+    public ResponseEntity<List<Order>> getOrdersByDate(@RequestParam(required = false) String before,
+                                                       @RequestParam(required = false) String after) {
         if (before != null) {
             return ResponseEntity.ok(orderService.getOrdersBeforeDate(LocalDate.parse(before)));
         }
@@ -61,13 +99,98 @@ public class OrderController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @Operation(summary = "Get orders by status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved orders by status")
+    })
     @GetMapping("/status/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable String status) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(status));
     }
 
-    @GetMapping("/comment")
-    public ResponseEntity<List<Order>> getOrdersByComment(@RequestParam String contains) {
+    @Operation(summary = "Get orders by comment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved orders by comment")
+    })
+    @GetMapping("/comment/{contains}")
+    public ResponseEntity<List<Order>> getOrdersByComment(@PathVariable String contains) {
         return ResponseEntity.ok(orderService.getOrdersByComment(contains));
     }
+
+
+
+    @Operation(summary = "Get a list of all tracking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of tracking ")
+    })
+    @GetMapping("/trackings")
+    public ResponseEntity<List<Tracking>> getAllTrackings() {
+        return ResponseEntity.ok(trackingService.getAllTrackings());
+    }
+
+    @Operation(summary = "Get a specific tracking  by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved tracking by ID"),
+            @ApiResponse(responseCode = "404", description = "Tracking not found")
+    })
+    @GetMapping("/trackings/{trackingId}")
+    public ResponseEntity<Tracking> getTracking(@PathVariable UUID trackingId) {
+        return ResponseEntity.ok(trackingService.getTrackingById(trackingId));
+    }
+
+    @Operation(summary = "Create a new tracking ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created the tracking ")
+    })
+    @PostMapping("/trackings")
+    public ResponseEntity<Tracking> createTracking(@RequestBody Tracking tracking) {
+        Tracking createdTracking = trackingService.createTracking(tracking);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTracking);
+    }
+
+    @Operation(summary = "Update an existing tracking by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated the tracking"),
+            @ApiResponse(responseCode = "404", description = "Tracking not found")
+    })
+    @PutMapping("/trackings/{trackingId}")
+    public ResponseEntity<Tracking> updateTracking(@PathVariable UUID trackingId, @RequestBody Tracking tracking) {
+        Tracking updatedTracking = trackingService.updateTracking(trackingId, tracking);
+        return ResponseEntity.ok(updatedTracking);
+    }
+
+    @Operation(summary = "Delete an existing tracking by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted the tracking"),
+            @ApiResponse(responseCode = "404", description = "Tracking not found")
+    })
+    @DeleteMapping("/trackings/{trackingId}")
+    public ResponseEntity<Void> deleteTracking(@PathVariable UUID trackingId) {
+        trackingService.deleteTracking(trackingId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Get tracking filtered by status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved tracking by status")
+    })
+    @GetMapping("/trackings/status/{status}")
+    public ResponseEntity<List<Tracking>> getTrackingsByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(trackingService.getTrackingByStatus(status));
+    }
+
+    @Operation(summary = "Get tracking packages filtered by code")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved tracking packages by code")
+    })
+    @GetMapping("/trackings/code/{code}")
+    public ResponseEntity<List<Tracking>> getTrackingsByCode(@PathVariable String code) {
+        return ResponseEntity.ok(trackingService.getTrackingByCode(code));
+    }
+
+
+
+
 }
