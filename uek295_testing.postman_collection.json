@@ -110,7 +110,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"orderId\": \"a1b2c3d4-e5f6-7890-ab12-cd34ef567890\",\r\n    \"status\": \"Pending\",\r\n    \"comment\": \"Bestellung in Bearbeitung\",\r\n    \"date\": \"2024-03-27\",\r\n    \"tracking\": {\r\n        \"trackingId\": \"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20\",\r\n        \"code\": \"ABC123\",\r\n        \"status\": \"Versandt\",\r\n        \"lastUpdate\": \"2024-03-27T10:30:00\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"orderId\": \"a1b2c3d4-e5f6-7890-ab12-cd34ef567890\",\r\n    \"status\": \"completed\",\r\n    \"comment\": \"Bestellung in Bearbeitung\",\r\n    \"date\": \"2024-03-27\",\r\n    \"tracking\": {\r\n        \"trackingId\": \"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20\",\r\n        \"code\": \"ABC123\",\r\n        \"status\": \"Versandt\",\r\n        \"lastUpdate\": \"2024-03-27T10:30:00\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -136,6 +136,20 @@
 				},
 				{
 					"name": "Delete_order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -288,6 +302,29 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "delete_tracking",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/trackings/6a7d5b3c-12e4-45f9-b9d2-60f4e6a8e9f1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"trackings",
+								"6a7d5b3c-12e4-45f9-b9d2-60f4e6a8e9f1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -366,7 +403,7 @@
 					"response": []
 				},
 				{
-					"name": "byDate",
+					"name": "orders_byDate",
 					"event": [
 						{
 							"listen": "test",
@@ -405,6 +442,53 @@
 								{
 									"key": "after",
 									"value": "1900-12-12"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trakings_byDate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/trackings/date?before=2024-03-28&after=2024-03-24",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"trackings",
+								"date"
+							],
+							"query": [
+								{
+									"key": "before",
+									"value": "2024-03-28"
+								},
+								{
+									"key": "after",
+									"value": "2024-03-24"
 								}
 							]
 						}
@@ -527,6 +611,48 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "orders_byStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/status?status=Pending",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "Pending"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -534,10 +660,226 @@
 			"name": "exception",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "ismissing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/invalid_id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"invalid_id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atributcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"\",\r\n  \"comment\": \"testcomment\",\r\n  \"date\": \"2025-12-31\",\r\n  \"tracking\": {\r\n    \"trackingId\": \"123e4567-e89b-12d3-a456-426614174000\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
 						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "new_order_missargs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"Pending\",\r\n  \"comment\": \"Kunde wartet auf Lieferung\",\r\n  \"date\": \"2024-03-28\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_checking_missargs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"trackingId\": \"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20\",\r\n        \"code\": \"EFG123\",\r\n        \"status\": \"Versandt\",\r\n        \"lastUpdate\": \"2324-03-27T10:30:00\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/trackings/5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"trackings",
+								"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_checking_missingargs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"trackingId\": \"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20\",\r\n        \"status\": \"Versandt\",\r\n        \"lastUpdate\": \"2024-03-27T10:30:00\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/orders/trackings/5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"trackings",
+								"5f8d4c9e-27a1-4e2f-b0a9-72a3e5293b20"
+							]
+						}
 					},
 					"response": []
 				}

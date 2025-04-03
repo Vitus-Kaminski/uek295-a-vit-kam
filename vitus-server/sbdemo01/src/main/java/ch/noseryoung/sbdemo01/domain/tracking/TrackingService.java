@@ -20,8 +20,7 @@ public class TrackingService {
     }
 
     public Tracking getTrackingById(UUID trackingId) {
-        return trackingRepository.findById(trackingId)
-                .orElseThrow(() -> new RuntimeException("Tracking not found"));
+        return trackingRepository.findById(trackingId).orElseThrow();
     }
 
     public Tracking createTracking(Tracking tracking) {
@@ -58,6 +57,7 @@ public class TrackingService {
     public List<Tracking> getTrackingBeforeDate(LocalDate lastUpdate) {
         return trackingRepository.findByLastUpdateBefore(lastUpdate.atStartOfDay());
     }
+
 
 
 }
