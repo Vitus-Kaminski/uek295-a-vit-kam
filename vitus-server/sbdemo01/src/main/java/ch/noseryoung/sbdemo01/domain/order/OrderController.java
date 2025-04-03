@@ -5,6 +5,7 @@ import ch.noseryoung.sbdemo01.domain.tracking.TrackingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,6 @@ public class OrderController {
     private TrackingService trackingService;
 
 
-
-
     @Operation(summary = "Get a list of all orders")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list of orders")
@@ -36,15 +35,21 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-
     @Operation(summary = "Get a specific order by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved order by ID"),
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrder(@PathVariable UUID orderId) {
-        return ResponseEntity.ok(orderService.getOrderById(orderId));
+    public Object getOrder(@RequestParam(required = false) Boolean mode, @PathVariable UUID orderId) {
+        Order order = orderService.getOrderById(orderId);
+        if (mode == null) {
+            return ResponseEntity.ok(order);
+        } else if (mode) {
+            return ResponseEntity.ok(order);
+        } else {
+            return ResponseEntity.ok(new OrderDTO(order));
+        }
     }
 
 
@@ -53,7 +58,7 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Successfully created the order")
     })
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
@@ -65,7 +70,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     @PutMapping("/{orderId}")
-    public ResponseEntity<Order> updateOrder(@PathVariable UUID orderId, @RequestBody Order order) {
+    public ResponseEntity<Order> updateOrder( @PathVariable UUID orderId, @RequestBody Order order) {
         Order updatedOrder = orderService.updateOrder(orderId, order);
         return ResponseEntity.ok(updatedOrder);
     }
@@ -80,7 +85,6 @@ public class OrderController {
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
     }
-
 
 
     @Operation(summary = "Get orders filtered by date")
@@ -104,8 +108,8 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved orders by status")
     })
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable String status) {
+    @GetMapping("/status")
+    public ResponseEntity<List<Order>> getOrdersByStatus(@RequestParam(required = true) String status) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(status));
     }
 
@@ -117,7 +121,6 @@ public class OrderController {
     public ResponseEntity<List<Order>> getOrdersByComment(@PathVariable String contains) {
         return ResponseEntity.ok(orderService.getOrdersByComment(contains));
     }
-
 
 
     @Operation(summary = "Get a list of all tracking")
@@ -155,7 +158,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Tracking not found")
     })
     @PutMapping("/trackings/{trackingId}")
-    public ResponseEntity<Tracking> updateTracking(@PathVariable UUID trackingId, @RequestBody Tracking tracking) {
+    public ResponseEntity<Tracking> updateTracking(@Valid @PathVariable UUID trackingId, @Valid @RequestBody Tracking tracking) {
         Tracking updatedTracking = trackingService.updateTracking(trackingId, tracking);
         return ResponseEntity.ok(updatedTracking);
     }
@@ -188,6 +191,23 @@ public class OrderController {
     @GetMapping("/trackings/code/{code}")
     public ResponseEntity<List<Tracking>> getTrackingsByCode(@PathVariable String code) {
         return ResponseEntity.ok(trackingService.getTrackingByCode(code));
+    }
+
+    @Operation(summary = "Get trakings filtered by date")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved filtered trakings by date"),
+            @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
+    @GetMapping("/trackings/date")
+    public ResponseEntity<List<Tracking>> getTrakingsByDate(@RequestParam(required = false) String before,
+                                                            @RequestParam(required = false) String after) {
+        if (before != null) {
+            return ResponseEntity.ok(trackingService.getTrackingBeforeDate(LocalDate.parse(before)));
+        }
+        if (after != null) {
+            return ResponseEntity.ok(trackingService.getTrackingAfterDate(LocalDate.parse(after)));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 

@@ -2,6 +2,7 @@ package ch.noseryoung.sbdemo01.domain.order;
 
 import ch.noseryoung.sbdemo01.domain.tracking.Tracking;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,16 @@ public class Order {
     @Column(name = "order_id")
     private UUID orderId;
 
+    @Column(name = "status")
     private String status;
+    @Column(name = "comment")
     private String comment;
+
+    @Column(name = "date")
+    @PastOrPresent
     private LocalDate date;
 
-    @OneToOne(cascade = CascadeType.PERSIST) // Kein ALL, um ungewollte Löschungen zu vermeiden
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tracking_id", referencedColumnName = "tracking_id", nullable = false)
     private Tracking tracking;
 }

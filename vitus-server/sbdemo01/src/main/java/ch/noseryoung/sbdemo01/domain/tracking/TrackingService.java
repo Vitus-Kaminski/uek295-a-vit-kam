@@ -51,12 +51,12 @@ public class TrackingService {
     }
 
 
-    public List<Tracking> getTrackingAfterDate(LocalDate date) {
-        return trackingRepository.findByLastUpdateAfter(date);
+    public List<Tracking> getTrackingAfterDate(LocalDate lastUpdate) {
+        return trackingRepository.findByLastUpdateAfter(lastUpdate.atStartOfDay());
     }
 
-    public List<Tracking> getTrackingBeforeDate(LocalDate date) {
-        return trackingRepository.findByLastUpdateBefore(date);
+    public List<Tracking> getTrackingBeforeDate(LocalDate lastUpdate) {
+        return trackingRepository.findByLastUpdateBefore(lastUpdate.atStartOfDay());
     }
 
 
