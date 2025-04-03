@@ -40,6 +40,8 @@ Die Anwendung läuft nun unter `http://localhost:8080`.
 
 ## API-Endpunkte
 
+Fals das Projekt lauft hier die Swagger dokumentation http://localhost:8080/swagger-ui/index.html#
+
 ### Order CRUD
 
 - **GET /api/v1/orders/{id}** – Bestellung per ID abrufen
