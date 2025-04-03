@@ -1,0 +1,575 @@
+{
+	"id": "332153ca-ef68-4abe-af87-f2edaf07a4a2",
+	"name": "uek295_testing",
+	"timestamp": "2025-04-03T10:06:41.748Z",
+	"collection_id": "43313951-c37c27c8-94d3-40ea-b4fd-1a620d96d682",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 17,
+	"delay": 0,
+	"persist": true,
+	"status": "error",
+	"startedAt": "2025-04-03T10:06:39.403Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "cfad02c3-c9cb-4526-9586-f7e72bed34de",
+			"name": "orderbyid",
+			"url": "http://localhost:8080/api/v1/orders/a1b2c3d4-e5f6-7890-ab12-cd34ef567890",
+			"time": 249,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				249
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "b0750d44-e0ba-4f0c-8a1d-01440d496751",
+			"name": "new_order",
+			"url": "http://localhost:8080/api/v1/orders",
+			"time": 85,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				85
+			],
+			"allTests": [
+				{
+					"Status code is 201": true
+				}
+			]
+		},
+		{
+			"id": "598f9675-d445-4a77-8b80-9d59141d1dbc",
+			"name": "update_order",
+			"url": "http://localhost:8080/api/v1/orders/a1b2c3d4-e5f6-7890-ab12-cd34ef567890",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "c39fae4f-9b89-4d3f-8ced-4c2b8b1f8407",
+			"name": "Delete_order",
+			"url": "http://localhost:8080/api/v1/orders/b2c3d4e5-f678-9012-ab34-cd56ef789012",
+			"time": 20,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code is 204": true
+			},
+			"testPassFailCounts": {
+				"Status code is 204": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Status code is 204": true
+				}
+			]
+		},
+		{
+			"id": "9f811d9a-cd84-4e82-9c9a-f1e88e851c0a",
+			"name": "getTrakinbyid",
+			"url": "http://localhost:8080/api/v1/orders/trackings/2d5c9f6b-3a0e-472e-92bf-1f4b1d88cfae",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "c3a40f71-2cdc-4755-b00b-bc30db92003a",
+			"name": "new_track",
+			"url": "http://localhost:8080/api/v1/orders/trackings",
+			"time": 14,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Status code is 201": true
+				}
+			]
+		},
+		{
+			"id": "598870d2-9933-4e9b-ac1e-7321f7458e20",
+			"name": "update_track",
+			"url": "http://localhost:8080/api/v1/orders/trackings/2d5c9f6b-3a0e-472e-92bf-1f4b1d88cfae",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "50773615-3d1e-4e94-9736-75f856b670ea",
+			"name": "delete_tracking",
+			"url": "http://localhost:8080/api/v1/orders/trackings/6a7d5b3c-12e4-45f9-b9d2-60f4e6a8e9f1",
+			"time": 15,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				15
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "655a4a82-e271-429a-b507-c4b265dc8306",
+			"name": "getAll",
+			"url": "http://localhost:8080/api/v1/orders",
+			"time": 62,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				62
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "c5d95a5f-06d4-4007-a355-f1df7e71c11a",
+			"name": "getAll trackings",
+			"url": "http://localhost:8080/api/v1/orders/trackings",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "e2e3568f-7c39-446e-b35e-9de8509a10e9",
+			"name": "orders_byDate",
+			"url": "http://localhost:8080/api/v1/orders/date?before=2029-10-10&after=1900-12-12",
+			"time": 31,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				31
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "3d7d782c-34ab-4464-8c2c-b3de104510ce",
+			"name": "trakings_byDate",
+			"url": "http://localhost:8080/api/v1/orders/trackings/date?before=2024-03-28&after=2024-03-24",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "2250a698-e0a3-4773-8cfc-ddaf8892b579",
+			"name": "byComment",
+			"url": "http://localhost:8080/api/v1/orders/comment/zugestellt",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "dba8b5d2-bb5c-41cc-ba2a-01fcced2a1b6",
+			"name": "byPending",
+			"url": "http://localhost:8080/api/v1/orders/status?status=Pending",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "5cef9327-17e4-4569-bf51-f7ee7d4571f0",
+			"name": "byCode",
+			"url": "http://localhost:8080/api/v1/orders/trackings/code/ABC123",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				8
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "12f04446-786c-474a-9c5d-9de7e43fd760",
+			"name": "orders_byStatus",
+			"url": "http://localhost:8080/api/v1/orders/status?status=Pending",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "fca4babe-ea93-4bd3-948e-2830bd71a2c3",
+			"name": "ismissing",
+			"url": "http://localhost:8080/api/v1/orders/invalid_id",
+			"time": 5,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {
+				"Status code is 500": true
+			},
+			"testPassFailCounts": {
+				"Status code is 500": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code is 500": true
+				}
+			]
+		},
+		{
+			"id": "0239b87f-75fe-49c4-bd26-35e147bc02cb",
+			"name": "atributcheck",
+			"url": "http://localhost:8080/api/v1/orders",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status code is 400": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 592,
+	"collection": {
+		"requests": [
+			{
+				"id": "cfad02c3-c9cb-4526-9586-f7e72bed34de",
+				"method": "GET"
+			},
+			{
+				"id": "b0750d44-e0ba-4f0c-8a1d-01440d496751",
+				"method": "POST"
+			},
+			{
+				"id": "598f9675-d445-4a77-8b80-9d59141d1dbc",
+				"method": "PUT"
+			},
+			{
+				"id": "c39fae4f-9b89-4d3f-8ced-4c2b8b1f8407",
+				"method": "DELETE"
+			},
+			{
+				"id": "9f811d9a-cd84-4e82-9c9a-f1e88e851c0a",
+				"method": "GET"
+			},
+			{
+				"id": "c3a40f71-2cdc-4755-b00b-bc30db92003a",
+				"method": "POST"
+			},
+			{
+				"id": "598870d2-9933-4e9b-ac1e-7321f7458e20",
+				"method": "PUT"
+			},
+			{
+				"id": "50773615-3d1e-4e94-9736-75f856b670ea",
+				"method": "DELETE"
+			},
+			{
+				"id": "655a4a82-e271-429a-b507-c4b265dc8306",
+				"method": "GET"
+			},
+			{
+				"id": "c5d95a5f-06d4-4007-a355-f1df7e71c11a",
+				"method": "GET"
+			},
+			{
+				"id": "e2e3568f-7c39-446e-b35e-9de8509a10e9",
+				"method": "GET"
+			},
+			{
+				"id": "3d7d782c-34ab-4464-8c2c-b3de104510ce",
+				"method": "GET"
+			},
+			{
+				"id": "2250a698-e0a3-4773-8cfc-ddaf8892b579",
+				"method": "GET"
+			},
+			{
+				"id": "dba8b5d2-bb5c-41cc-ba2a-01fcced2a1b6",
+				"method": "GET"
+			},
+			{
+				"id": "5cef9327-17e4-4569-bf51-f7ee7d4571f0",
+				"method": "GET"
+			},
+			{
+				"id": "12f04446-786c-474a-9c5d-9de7e43fd760",
+				"method": "GET"
+			},
+			{
+				"id": "fca4babe-ea93-4bd3-948e-2830bd71a2c3",
+				"method": "GET"
+			},
+			{
+				"id": "0239b87f-75fe-49c4-bd26-35e147bc02cb",
+				"method": "POST"
+			},
+			{
+				"id": "0e7d579f-594b-41fb-a583-00a3b1f88cf9",
+				"method": "POST"
+			}
+		]
+	}
+}
