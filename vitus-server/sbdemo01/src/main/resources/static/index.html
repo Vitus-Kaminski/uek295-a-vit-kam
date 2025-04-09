@@ -4,224 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order & Tracking Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        input, select, button {
-            margin: 10px;
-            padding: 10px;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .output {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            text-align: left;
-            white-space: pre-wrap;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="container">
-    <h1>📦 Order & Tracking Management</h1>
+    <h1>Order & Tracking Management</h1>
 
-    <h2>📋 Alle Bestellungen abrufen</h2>
-    <button onclick="loadOrders()">🔄 Bestellungen laden</button>
-    <table id="orderTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Kommentar</th>
-            <th>Status</th>
-            <th>Aktionen</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <section>
+        <h2>Alle Bestellungen</h2>
+        <button onclick="getAllOrders()">Laden</button>
+        <div id="ordersTable"></div>
+    </section>
 
-    <h2>📝 Neue Bestellung erstellen</h2>
-    <input type="text" id="orderComment" placeholder="Kommentar">
-    <input type="text" id="orderStatus" placeholder="Status">
-    <button onclick="createOrder()">✅ Bestellung erstellen</button>
+    <section>
+        <h2>Neue Bestellung erstellen</h2>
+        <form id="createOrderForm">
+            <input type="text" name="status" placeholder="Status" required>
+            <input type="text" name="comment" placeholder="Kommentar" required>
+            <input type="date" name="date" required>
+            <input type="text" name="trackingCode" placeholder="Tracking-Code">
+            <input type="text" name="trackingStatus" placeholder="Tracking-Status">
+            <input type="datetime-local" name="trackingUpdate">
+            <button type="submit">Erstellen</button>
+        </form>
+    </section>
 
-    <h2>🛠 Bestellung aktualisieren</h2>
-    <input type="text" id="updateOrderId" placeholder="Order ID (UUID)">
-    <input type="text" id="updateOrderComment" placeholder="Neuer Kommentar">
-    <input type="text" id="updateOrderStatus" placeholder="Neuer Status">
-    <button onclick="updateOrder()">🔄 Aktualisieren</button>
+    <section>
+        <h2>Alle Trackings</h2>
+        <button onclick="getAllTrackings()">Laden</button>
+        <div id="trackingsTable"></div>
+    </section>
 
-    <h2>❌ Bestellung löschen</h2>
-    <input type="text" id="deleteOrderId" placeholder="Order ID (UUID)">
-    <button onclick="deleteOrder()">🗑 Löschen</button>
+    <section>
+        <h2>Filterfunktionen</h2>
+        <input type="text" id="filterComment" placeholder="Kommentar enthält...">
+        <button onclick="filterOrdersByComment()">Filtern</button>
+        <input type="text" id="filterStatus" placeholder="Status">
+        <button onclick="filterOrdersByStatus()">Filtern</button>
+        <input type="text" id="filterTrackingCode" placeholder="Tracking-Code">
+        <button onclick="filterTrackingsByCode()">Filtern</button>
+    </section>
 
-    <h2>🚚 Tracking abrufen</h2>
-    <button onclick="loadTrackings()">📍 Alle Trackings laden</button>
-    <table id="trackingTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <section>
+        <h2>Bestellung nach Datum</h2>
+        <input type="date" id="orderAfter">
+        <input type="date" id="orderBefore">
+        <button onclick="filterOrdersByDate()">Filtern</button>
+    </section>
 
-    <h2>🔍 Tracking nach ID abrufen</h2>
-    <input type="text" id="trackingIdInput" placeholder="Tracking ID (UUID)">
-    <button onclick="getTracking()">📡 Tracking abrufen</button>
-    <div class="output" id="trackingOutput"></div>
+    <section>
+        <h2>Tracking nach Datum</h2>
+        <input type="date" id="trackAfter">
+        <input type="date" id="trackBefore">
+        <button onclick="filterTrackingsByDate()">Filtern</button>
+
+    </section>
+
+    <div id="output"><h2>Output</h2></div>
 </div>
 
-<script>
-    const API_URL = "http://localhost:8080/api/v1";
-
-    async function loadOrders() {
-        try {
-            const response = await fetch(`${API_URL}/orders`);
-            const data = await response.json();
-            const table = document.querySelector("#orderTable tbody");
-            table.innerHTML = "";
-            data.forEach(order => {
-                const row = `<tr>
-                        <td>${order.id}</td>
-                        <td>${order.comment}</td>
-                        <td>${order.status}</td>
-                        <td><button onclick="deleteOrder('${order.id}')">🗑</button></td>
-                    </tr>`;
-                table.innerHTML += row;
-            });
-        } catch (error) {
-            console.error("Fehler beim Laden der Bestellungen:", error);
-        }
-    }
-
-    async function createOrder() {
-        const comment = document.getElementById('orderComment').value;
-        const status = document.getElementById('orderStatus').value;
-        const order = { comment, status };
-
-        try {
-            const response = await fetch(`${API_URL}/orders`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(order)
-            });
-            const data = await response.json();
-            alert("Bestellung erstellt! ID: " + data.id);
-            loadOrders();
-        } catch (error) {
-            console.error("Fehler beim Erstellen der Bestellung:", error);
-        }
-    }
-
-    async function updateOrder() {
-        const orderId = document.getElementById('updateOrderId').value;
-        const comment = document.getElementById('updateOrderComment').value;
-        const status = document.getElementById('updateOrderStatus').value;
-        const order = { comment, status };
-
-        try {
-            await fetch(`${API_URL}/orders/${orderId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(order)
-            });
-            alert("Bestellung aktualisiert!");
-            loadOrders();
-        } catch (error) {
-            console.error("Fehler beim Aktualisieren:", error);
-        }
-    }
-
-    async function deleteOrder(orderId = null) {
-        if (!orderId) {
-            orderId = document.getElementById('deleteOrderId').value;
-        }
-        if (!orderId) {
-            alert("Bitte eine Order ID eingeben!");
-            return;
-        }
-        try {
-            await fetch(`${API_URL}/orders/${orderId}`, { method: "DELETE" });
-            alert("Bestellung gelöscht!");
-            loadOrders();
-        } catch (error) {
-            console.error("Fehler beim Löschen der Bestellung:", error);
-        }
-    }
-
-    async function loadTrackings() {
-        try {
-            const response = await fetch(`${API_URL}/orders/trackings`);
-            const data = await response.json();
-            const table = document.querySelector("#trackingTable tbody");
-            table.innerHTML = "";
-            data.forEach(tracking => {
-                const row = `<tr>
-                        <td>${tracking.id}</td>
-                        <td>${tracking.status}</td>
-                    </tr>`;
-                table.innerHTML += row;
-            });
-        } catch (error) {
-            console.error("Fehler beim Laden der Trackings:", error);
-        }
-    }
-
-    async function getTracking() {
-        const trackingId = document.getElementById('trackingIdInput').value;
-        try {
-            const response = await fetch(`${API_URL}/orders/trackings/${trackingId}`);
-            const data = await response.json();
-            document.getElementById('trackingOutput').textContent = JSON.stringify(data, null, 2);
-        } catch (error) {
-            console.error("Fehler beim Abrufen des Trackings:", error);
-        }
-    }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>

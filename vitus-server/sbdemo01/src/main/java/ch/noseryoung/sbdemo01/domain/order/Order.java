@@ -20,7 +20,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class
+Order {
 
     @Id
     @GeneratedValue
